@@ -5,28 +5,62 @@
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
+
+  <style>
+    .box {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      row-gap: 4px;
+      align-items: center;
+      padding: 8px;
+      border-radius: 8px;
+      border: solid 1px #ccc;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
 </head>
 <body>
 
-<form action="/tryLogin" method="post">
-  {% csrf_token %}
-  {% if login_error %}
-  Wrong login/password
-  {% endif %}
-  <input type="text" name="login" placeholder="Login" />
-  <input type="password" name="password" placeholder="Password" />
-  <input type="submit" value="Login">
-</form>
+<div class="container" style="display: flex; height: 98vh; flex-direction: column; align-items: center; justify-content: center; row-gap: 40px;">
+  <form action="/tryLogin" method="post">
+    {% csrf_token %}
+    <div class="box">
+      <h4>Already a user?</h4>
+      <input type="text" name="login" placeholder="Login" class="form-control" />
+      <input type="password" name="password" placeholder="Password" class="form-control" />
+      <div>
+        <input type="submit" value="Login" class="btn btn-primary" />
+      </div>
+      <p class="error">
+        {% if login_error %}
+        Wrong login/password
+        {% endif %}
+      </p>
+    </div>
+  </form>
 
-<form action="/tryRegister" method="post">
-  {% csrf_token %}
-  {% if reg_error %}
-  User already exists
-  {% endif %}
-  <input type="text" name="login" placeholder="Login" />
-  <input type="password" name="password" placeholder="Password" />
-  <input type="submit" value="Register">
-</form>
+  <form action="/tryRegister" method="post">
+    
+    <div class="box">
+      {% csrf_token %}
+      <h4>Create a new account</h4>
+      <input type="text" name="login" placeholder="Login" class="form-control" />
+      <input type="password" name="password" placeholder="Password" class="form-control" />
+      <div>
+        <input type="submit" value="Register" class="btn btn-primary" />
+      </div>
+      <p class="error">
+        {% if reg_error %}
+        User already exists
+        {% endif %}
+      </p>
+    </div>
+  </form>
+</div>
 
 </body>
 </html>

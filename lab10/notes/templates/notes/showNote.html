@@ -8,23 +8,25 @@
 </head>
 <body>
 
-<h1>{{ title }}</h1>
+<div class="container" style="padding: 48px;">
+  <h1>{{ title }}</h1>
 
-{% if topic.public %}
-  <h4>In topic {{ topic.title }} by {{ author.username }}</h2>
-{% else %}
-  <h4>In non-public by {{ author.username }}</h2>
-{% endif %}
+  {% if topic.public %}
+    <h4>In topic {{ topic.title }} by {{ author.username }}</h2>
+  {% else %}
+    <h4>In non-public by {{ author.username }}</h2>
+  {% endif %}
 
-<p>{{ content }}</p>
+  <p>{{ content }}</p>
 
-{% if can_delete %}
-  <button onclick="window.location.href='/deleteNote?note_id={{ note_id }}'">Delete</button>
-{% endif %}
+  {% if can_delete %}
+    <button onclick="window.location.href='/deleteNote?note_id={{ note_id }}'" class="btn btn-primary">Delete</button>
+  {% endif %}
 
-{% if can_edit %}
-  <button onclick="window.location.href='/editNote?id={{ note_id }}'">Edit</button>
-{% endif %}
+  {% if can_edit %}
+    <button onclick="window.location.href='/editNote?id={{ note_id }}'" class="btn btn-primary">Edit</button>
+  {% endif %}
+</div>
 
 </body>
 </html>

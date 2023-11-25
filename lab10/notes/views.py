@@ -182,7 +182,7 @@ def showNote(request, note_id):
 def showTopics(request):
   topics = Topic.objects.order_by("-title")
 
-  context = {"topics": topics, "can_edit": request.user.is_superuser}
+  context = {"topics": topics, "can_edit": request.user.is_superuser, "logged_in": request.user.is_authenticated}
   
   return render(request, "notes/topics.html", context)
 

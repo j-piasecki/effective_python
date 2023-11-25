@@ -5,30 +5,66 @@
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
+
+  <style>
+    a {
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-  {% if can_edit %}
-    <button onclick="window.location.href='/editTopic'">New topic</button>
-  {% endif %}
+<div class="container-fluid">
+  <ul class="nav bg-primary mb-3">
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/">Notes</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/topics">Topics</a>
+    </li>
+    <div style="flex: 1"></div>
+    {% if can_edit %}
+      <li class="nav-item">
+        <a class="nav-link link-light" href="/editTopic">New topic</a>
+      </li>
+    {% endif %}
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/editNote">New note</a>
+    </li>
+    {% if logged_in %}
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/logout">Logout</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/login">Login</a>
+    </li>
+    {% endif %}
+  </ul>
 
-  {% if topics %}
-    <ul>
-    {% for topic in topics %}
-        <li>
-          <a href="/?topic={{ topic.id }}">{{ topic.title }}</a>
+  <div style="display: flex; justify-content: center;">
+    <div style="width: 600px;">
+      {% if topics %}
+        <ul class="list-group list-group-flush">
+        {% for topic in topics %}
+            <li class="list-group-item">
+              <div style="display: flex; column-gap: 4px; align-items: center;">
+                <a href="/?topic={{ topic.id }}">{{ topic.title }}</a>
 
-          {% if can_edit %}
-            <button onclick="window.location.href='/editTopic?id={{ topic.id }}'">Edit</button>
-            <button onclick="window.location.href='/deleteTopic?id={{ topic.id }}'">Delete</button>
-          {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-  {% else %}
-      <p>No topics</p>
-  {% endif %}
+                {% if can_edit %}
+                  <div style="flex: 1;"></div>
+                  <button onclick="window.location.href='/editTopic?id={{ topic.id }}'" class="btn btn-primary">Edit</button>
+                  <button onclick="window.location.href='/deleteTopic?id={{ topic.id }}'" class="btn btn-primary">Delete</button>
+                {% endif %}
+              </div>
+            </li>
+        {% endfor %}
+        </ul>
+      {% else %}
+          <p style="text-align: center;">No topics</p>
+      {% endif %}
+    </div>
+  </div>
 </div>
 
 </body>

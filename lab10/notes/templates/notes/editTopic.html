@@ -5,27 +5,45 @@
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
+
+  <style>
+    .box {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      row-gap: 4px;
+      align-items: center;
+      padding: 8px;
+      border-radius: 8px;
+      border: solid 1px #ccc;
+    }
+  </style>
 </head>
 <body>
 
-<form action="/saveTopic" method="post">
-  {% csrf_token %}
-
-  <input type="text" name="topic_id" value="{{ topic_id }}" hidden />
-
-  <input type="text" name="title" value="{{ title }}" minlength="3" />
-  <textarea name="description">{{ description }}</textarea>
-  <select name="parent">
-    {% for topic in topics %}
-      {% if topic.id == parent_id %}
-        <option value="{{ topic.id }}" selected>{{ topic.title }}</option>
-      {% else %}
-        <option value="{{ topic.id }}">{{ topic.title }}</option>
-      {% endif %}
-    {% endfor %}
-  </select>
-  <input type="submit" value="Save">
-</form>
+<div class="container" style="display: flex; height: 98vh; flex-direction: column; align-items: center; justify-content: center; row-gap: 40px;">
+    <form action="/saveTopic" method="post">
+    {% csrf_token %}
+    <div class="box">
+      <input type="text" name="topic_id" value="{{ topic_id }}" hidden />
+      <h4>Topic</h4>
+      <input type="text" name="title" value="{{ title }}" minlength="3" class="form-control" />
+      <textarea name="description" class="form-control">{{ description }}</textarea>
+      <select name="parent" class="form-control">
+        {% for topic in topics %}
+          {% if topic.id == parent_id %}
+            <option value="{{ topic.id }}" selected>{{ topic.title }}</option>
+          {% else %}
+            <option value="{{ topic.id }}">{{ topic.title }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      <div>
+        <input type="submit" value="Save" class="btn btn-primary" />
+      </div>
+    </div>
+  </form>
+</div>
 
 </body>
 </html>
