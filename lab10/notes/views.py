@@ -90,14 +90,22 @@ def editNote(request):
     content = note.content
     topic = note.topic
 
+  if topic:
+    topic_id = topic.id
+  else:
+    topic_id = None
+
   topics = Topic.objects.order_by("-title")
-  context = {"title": title, "content": content, "topic": topic, "note_id": note_id, "topics": topics}
+  context = {"title": title, "content": content, "topic_id": topic_id, "note_id": note_id, "topics": topics}
   
   return render(request, "notes/editNote.html", context)
 
 class SaveNoteView(UserPassesTestMixin, View):
   def post(self, request):
     note_id = self.request.POST.get('note_id', None)
+    if note_id == 'None':
+      note_id = None
+
     title = self.request.POST.get('title', '')
     content = self.request.POST.get('content', '')
     topic_id = self.request.POST.get('topic', None)
@@ -170,3 +178,89 @@ def showNote(request, note_id):
   context = {"title": title, "content": content, "topic": topic, "author": author, "note_id": note_id, "can_delete": can_delete, "can_edit": can_edit }
   
   return render(request, "notes/showNote.html", context)
+
+def showTopics(request):
+  topics = Topic.objects.order_by("-title")
+
+  context = {"topics": topics, "can_edit": request.user.is_superuser}
+  
+  return render(request, "notes/topics.html", context)
+
+def editTopic(request):
+  if not request.user.is_superuser:
+    return redirect('/login')
+
+  title = ''
+  description = ''
+  parent = None
+
+  topic_id = request.GET.get('id', None)
+
+  try:
+    topic = Topic.objects.get(id=topic_id)
+  except:
+    topic = None
+
+  if topic:
+    title = topic.title
+    description = topic.description
+    parent = topic.subtopic_of
+
+  if parent:
+    parent_id = parent.id
+  else:
+    parent_id = None
+
+  topics = Topic.objects.order_by("-title")
+  context = {"title": title, "description": description, "parent_id": parent_id, "topic_id": topic_id, "topics": topics}
+  
+  return render(request, "notes/editTopic.html", context)
+
+class SaveTopicView(UserPassesTestMixin, View):
+  def post(self, request):
+    topic_id = self.request.POST.get('topic_id', None)
+    if topic_id == 'None':
+      topic_id = None
+
+    title = self.request.POST.get('title', '')
+    description = self.request.POST.get('description', '')
+    parent_id = self.request.POST.get('parent', None)
+
+    if topic_id:
+      topic = Topic.objects.get(id=topic_id)
+      topic.title = title
+      topic.description = description
+      topic.parent = Topic.objects.get(id=parent_id)
+      topic.save()
+    else:
+      topic = Topic.objects.create(
+        title=title,
+        description=description,
+        subtopic_of=Topic.objects.get(id=parent_id),
+      )
+      topic.save()
+
+    return redirect('/topics')
+
+  def test_func(self):
+    topic_id = self.request.POST.get('topic_id', None)
+    if topic_id == 'None':
+      topic_id = None
+
+    return self.request.user.is_superuser and (topic_id is None or int(topic_id) > 1)
+
+class DeleteTopicView(UserPassesTestMixin, View):
+  def get(self, request):
+    topic_id = self.request.GET.get('id', None)
+
+    topic = Topic.objects.get(id=topic_id)
+    topic.delete()
+
+    return redirect('/topics')
+
+  def test_func(self):
+    topic_id = self.request.POST.get('topic_id', None)
+    if topic_id == 'None':
+      topic_id = None
+
+    return self.request.user.is_superuser and (topic_id is None or int(topic_id) > 1)

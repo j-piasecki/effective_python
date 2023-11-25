@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+</head>
+<body>
+
+<div class="container">
+  {% if can_edit %}
+    <button onclick="window.location.href='/editTopic'">New topic</button>
+  {% endif %}
+
+  {% if topics %}
+    <ul>
+    {% for topic in topics %}
+        <li>
+          <a href="/?topic={{ topic.id }}">{{ topic.title }}</a>
+
+          {% if can_edit %}
+            <button onclick="window.location.href='/editTopic?id={{ topic.id }}'">Edit</button>
+            <button onclick="window.location.href='/deleteTopic?id={{ topic.id }}'">Delete</button>
+          {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+      <p>No topics</p>
+  {% endif %}
+</div>
+
+</body>
+</html>
