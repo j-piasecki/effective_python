@@ -27,7 +27,7 @@
   {% if notes_list %}
     <ul>
     {% for note in notes_list %}
-        <li><a href="/note/{{ note.id }}/">{{ note.title }}</a></li>
+        <li><a href="/showNote/{{ note.id }}">{{ note.title }}</a></li>
     {% endfor %}
     </ul>
   {% else %}
