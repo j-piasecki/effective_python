@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+</head>
+<body>
+
+<div class="container">
+  <ul class="nav bg-info">
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/">HOME</a>
+    </li>
+    {% if logged_in %}
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/logout">LOGOUT</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/login">LOGIN</a>
+    </li>
+    {% endif %}
+  </ul>
+
+  {% if notes_list %}
+    <ul>
+    {% for note in notes_list %}
+        <li><a href="/note/{{ note.id }}/">{{ note.title }}</a></li>
+    {% endfor %}
+    </ul>
+  {% else %}
+      <p>No notes.</p>
+  {% endif %}
+</div>
+</body>
+</html>

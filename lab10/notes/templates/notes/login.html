@@ -1,0 +1,19 @@
+<form action="/tryLogin" method="post">
+  {% csrf_token %}
+  {% if login_error %}
+  Wrong login/password
+  {% endif %}
+  <input type="text" name="login" placeholder="Login" />
+  <input type="password" name="password" placeholder="Password" />
+  <input type="submit" value="Login">
+</form>
+
+<form action="/tryRegister" method="post">
+  {% csrf_token %}
+  {% if reg_error %}
+  User already exists
+  {% endif %}
+  <input type="text" name="login" placeholder="Login" />
+  <input type="password" name="password" placeholder="Password" />
+  <input type="submit" value="Register">
+</form>
